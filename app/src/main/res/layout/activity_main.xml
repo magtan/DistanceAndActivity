@@ -15,7 +15,8 @@
         android:layout_marginTop="16dp"
         android:text="Walking: Default"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stillText" />
+        app:layout_constraintTop_toBottomOf="@+id/stillText"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/cyclingText"
@@ -25,7 +26,8 @@
         android:layout_marginTop="16dp"
         android:text="Cycling: Default"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/walkingText" />
+        app:layout_constraintTop_toBottomOf="@+id/walkingText"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/drivingText"
@@ -35,7 +37,8 @@
         android:layout_marginTop="16dp"
         android:text="Driving: Default"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cyclingText" />
+        app:layout_constraintTop_toBottomOf="@+id/cyclingText"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/stillText"
@@ -45,7 +48,8 @@
         android:text="Still: Default"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/mProbText"
@@ -55,17 +59,52 @@
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/drivingText" />
+        app:layout_constraintTop_toBottomOf="@+id/drivingText"
+        android:layout_marginStart="16dp" />
 
-    <TextView
-        android:id="@+id/timerText"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn">
+
+        <TextView
+            android:id="@+id/timerText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Activity update"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mProbText" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="TImer"
+        android:text="Get updates"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mProbText" />
+        android:layout_marginStart="8dp" />
+
+    <Button
+        android:id="@+id/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Cancel updates"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="8dp" />
 
 
 </android.support.constraint.ConstraintLayout>

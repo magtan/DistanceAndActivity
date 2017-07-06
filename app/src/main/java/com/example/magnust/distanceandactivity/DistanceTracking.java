@@ -63,15 +63,12 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
     private Location mLastLocation;
     private String activity;
     private String probableActivity;
-
-    // db
     private DatabaseHelper myDb;
-
     private Context context;
     private Activity activityContext;
     private LocationManager service;
     private boolean enabled;
-
+    private boolean update = false;
     private TextView stillTextView;
     private TextView walkingTextView;
     private TextView cyclingTextView;
@@ -141,13 +138,21 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
                     @Override
                     public void onResult(@NonNull DetectedActivityResult detectedActivityResult) {
                         ActivityRecognitionResult result = detectedActivityResult.getActivityRecognitionResult();
-                        /*
-                        Log.i(TAG, "time: " + result.getTime());
-                        Log.i(TAG, "elapsed time: " + result.getElapsedRealtimeMillis());
-                        for( DetectedActivity activity : result.getProbableActivities() ) {
-                            Log.i(TAG, "Activity: " + activity.getType() + " Likelihood: " + activity.getConfidence() );
+                        if(update){
+                            Log.i(TAG, "time: " + result.getTime());
+                            Log.i(TAG, "elapsed time: " + result.getElapsedRealtimeMillis());
+                            String stringBuffer ="";
+                            for( DetectedActivity activity : result.getProbableActivities() ) {
+                                Log.i(TAG, "Activity num.: " + activity.getType() + " Activity: " + translateActivity(activity.getType()) +
+                                        " Likelihood: " + activity.getConfidence() );
+                                stringBuffer = stringBuffer + "\nActivity num.: " + activity.getType() +
+                                        "\nActivity: " + translateActivity(activity.getType()) +
+                                        "\nLikelihood: " + activity.getConfidence() + "\n";
+                            }
+                            timerTextView.setText(stringBuffer);
                         }
-                        */
+
+
                         Log.e(TAG, "Snapshot: " + result.getMostProbableActivity().toString());
                         //First time
                         if(enabled){
@@ -157,6 +162,45 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
                         probableTextView.setText("Most probable activity: " + result.getMostProbableActivity().toString());
                     }
                 });
+    }
+
+    private String translateActivity(int number){
+        String stringActivity;
+
+        switch (number){
+            case 0:
+                stringActivity = "IN_CAR";
+                break;
+            case 1:
+                stringActivity = "ON_BICYCLE";
+                break;
+            case 2:
+                stringActivity = "ON_FOOT";
+                break;
+            case 3:
+                stringActivity = "STILL";
+                break;
+            case 4:
+                stringActivity = "UNKNOWN";
+                break;
+            case 5:
+                stringActivity = "5 - DOES NOT EXIST?";
+                break;
+            case 6:
+                stringActivity = "6 - DOES NOT EXIST?";
+                break;
+            case 7:
+                stringActivity = "WALKING";
+                break;
+            case 8:
+                stringActivity = "RUNNING";
+                break;
+            default:
+                stringActivity = "default";
+                break;
+        }
+
+        return stringActivity;
     }
 
 
@@ -216,7 +260,7 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
                 drivingTextView.setBackgroundColor(Color.TRANSPARENT);
                 detectActivity();
 
-                if (mGoogleApiClientLoc.isConnected()) {
+                if (mGoogleApiClientLoc.isConnected() && !update) {
                     mGoogleApiClientLoc.disconnect();
                 }
 
@@ -278,7 +322,10 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
 
     public void setActivity(String activity){
         this.activity = activity;
-        mGoogleApiClientLoc.connect();
+        if (!mGoogleApiClientLoc.isConnected()) {
+            mGoogleApiClientLoc.connect();
+        }
+
     }
 
     public void initiateLocation(){
@@ -295,7 +342,6 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
 
     private void registerFences() {
         Calendar cal = Calendar.getInstance();
-        timerTextView.setText("Time zone: " + cal.getTimeZone().toString());
         //Create fences
         AwarenessFence onFootFence = DetectedActivityFence.during(DetectedActivityFence.ON_FOOT);
         AwarenessFence runningFence = DetectedActivityFence.during(DetectedActivityFence.RUNNING);
@@ -304,13 +350,7 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
         AwarenessFence walkingFence = DetectedActivityFence.during(DetectedActivityFence.WALKING);
         AwarenessFence cyclingFence = DetectedActivityFence.during(DetectedActivityFence.ON_BICYCLE);
         AwarenessFence drivingFence = DetectedActivityFence.during(DetectedActivityFence.IN_VEHICLE);
-        /*
-                AwarenessFence timerFence = TimeFence.inIntervalOfDay(TimeFence.DAY_OF_WEEK_WEDNESDAY, cal.getTimeZone(),
-                15L*60L*60L*1000L + 55L*60L*1000L , 15L*60L*60L*1000L + 59L*60L*1000L);
 
-        */
-        // Register the fence to receive callbacks.
-        // The fence key uniquely identifies the fence.
         Awareness.FenceApi.updateFences(
                 mGoogleApiClientAware,
                 new FenceUpdateRequest.Builder()
@@ -342,6 +382,11 @@ public class DistanceTracking extends MainActivity implements GoogleApiClient.Co
         unregisterFence("walkingFence");
         unregisterFence("cyclingFence");
         unregisterFence("drivingFence");
+    }
+
+    public void updateActivity(boolean update){
+        this.update = update;
+        mGoogleApiClientLoc.connect();
     }
 
     private void unregisterFence(final String fenceKey) {

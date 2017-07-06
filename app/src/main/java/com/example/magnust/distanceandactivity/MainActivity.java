@@ -11,11 +11,16 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ButtonBarLayout;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View.OnClickListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnClickListener {
+
     private final static String LOG = "MainActivity";
     private String activity = "STILL";
     private DistanceTracking distanceTracking;
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView drivingText;
     private TextView mProbText;
     private TextView timerText;
+    private Button btn;
     private static final String FENCE_RECEIVER_ACTION = "FENCE_RECEIVE";
 
 
@@ -42,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         drivingText = (TextView) findViewById(R.id.drivingText);
         mProbText = (TextView) findViewById(R.id.mProbText);
         timerText = (TextView) findViewById(R.id.timerText);
+        btn = (Button) findViewById(R.id.btn);
+        btn.setOnClickListener(this);
+        findViewById(R.id.btn2).setOnClickListener(this);
 
         distanceTracking = new DistanceTracking(activityContext, this, stillText, walkingText,
                 cyclingText, drivingText, mProbText, timerText);
@@ -52,6 +61,27 @@ public class MainActivity extends AppCompatActivity {
         } else {
             alertbox();
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.btn:
+                distanceTracking.updateActivity(true);
+                break;
+
+            case R.id.btn2:
+                distanceTracking.updateActivity(false);
+                //timerText.setText("Update canceled");
+                break;
+
+
+            default:
+                break;
+        }
+
     }
 
     @Override
