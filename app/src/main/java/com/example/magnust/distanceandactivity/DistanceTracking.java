@@ -164,7 +164,7 @@ package com.example.magnust.distanceandactivity;
 
             switch (number){
                 case 0:
-                    stringActivity = "IN_CAR";
+                    stringActivity = "IN_VEHICLE";
                     break;
                 case 1:
                     stringActivity = "ON_BICYCLE";
@@ -248,7 +248,7 @@ package com.example.magnust.distanceandactivity;
                 mLastLocation = location;
 
                 // The code is tricked to think that it knows activity
-                if(activity.equals("STILL")){
+                if(activity.equals("STILL") || activity.equals("UNKNOWN")){
                     stillTextView.setBackgroundColor(Color.RED);
                     walkingTextView.setBackgroundColor(Color.TRANSPARENT);
                     cyclingTextView.setBackgroundColor(Color.TRANSPARENT);
@@ -278,28 +278,16 @@ package com.example.magnust.distanceandactivity;
 
                         detectActivity();
 
-                        switch (currentActivity){
+                        switch (activity){
                             case "WALKING":
                                 walkingTextView.setBackgroundColor(Color.RED);
 
                                 break;
-                            case "ON_FOOT":
-                                walkingTextView.setBackgroundColor(Color.RED);
-
-                                break;
-                            case "RUNNING":
-                                walkingTextView.setBackgroundColor(Color.RED);
-
-                                break;
-                            case "UNKNOWN":
-                                stillTextView.setBackgroundColor(Color.RED);
-
-                                break;
-                            case "ON_BICYCLE":
+                            case "CYCLING":
                                 cyclingTextView.setBackgroundColor(Color.RED);
 
                                 break;
-                            case "IN_VEHICLE":
+                            case "DRIVING":
                                 drivingTextView.setBackgroundColor(Color.RED);
 
                                 break;
