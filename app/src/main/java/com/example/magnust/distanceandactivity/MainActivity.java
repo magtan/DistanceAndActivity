@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         unregisterReceiver(distanceTracking.getFenceReceiver());
     }
 
-    protected Boolean checkGpsStatus() {
+    protected boolean checkGpsStatus() {
         ContentResolver contentResolver = getBaseContext().getContentResolver();
         boolean gpsStatus = Settings.Secure
                 .isLocationProviderEnabled(contentResolver,
