@@ -105,6 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.i(LOG, "cursorHasResult = " + String.format("%.1f", (double)cursorHasResults));
             // Note: if the cursor doesn't have results, the method makes first entry and return
             if(cursorHasResults > 0){
+                //TODO: Magnus -> don't think this is necessary, maybe just use date?
                 lastDateInRow.moveToLast();
                 oldDate = lastDateInRow.getString(lastDateInRow.getColumnIndex("DATE"));
             }else {
@@ -282,7 +283,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // The activity is driving
                 drivingDistance += distance;
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(D_COL_3, drivingDistance);
+                contentValues.put(D_COL_4, drivingDistance);
 
                 db.update(TABLE_DISTANCE, contentValues,"DATE = ?" , new String[]{date});
                 return true;
